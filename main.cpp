@@ -17,7 +17,10 @@ path operator""_p(const char* data, std::size_t sz) {
 	return path(data, data + sz);
 }
 
-// напишите эту функцию
+void PrintErrorMessage(const string& filename, const path& in_file, int line_number) {
+    cout << "unknown include file " << filename << " at file " << in_file.string() << " at line " << line_number << endl;
+}
+
 bool PreprocessRecursive(const path& in_file, ostream& out, const vector<path>& include_directories) {
 	ifstream in(in_file);
 	if (!in.is_open()) return false;
@@ -53,7 +56,7 @@ bool PreprocessRecursive(const path& in_file, ostream& out, const vector<path>& 
 				}
 			}
 			else {
-				cout << "unknown include file " << filename << " at file " << in_file.string() << " at line " << line_number << endl;
+				PrintErrorMessage(filename, in_file, line_number);
 				return false;
 			}
 		}
@@ -73,7 +76,7 @@ bool PreprocessRecursive(const path& in_file, ostream& out, const vector<path>& 
 				}
 			}
 			else {
-				cout << "unknown include file " << filename << " at file " << in_file.string() << " at line " << line_number << endl;
+				PrintErrorMessage(filename, in_file, line_number);
 				return false;
 			}
 		}
@@ -83,6 +86,8 @@ bool PreprocessRecursive(const path& in_file, ostream& out, const vector<path>& 
 	}
 	return true;
 }
+
+
 
 bool Preprocess(const path& in_file, const path& out_file, const vector<path>& include_directories) {
 	ifstream in(in_file);
@@ -98,7 +103,6 @@ bool Preprocess(const path& in_file, const path& out_file, const vector<path>& i
 string GetFileContents(string file) {
 	ifstream stream(file);
 
-	// конструируем string по двум итераторам
 	return { (istreambuf_iterator<char>(stream)), istreambuf_iterator<char>() };
 }
 
